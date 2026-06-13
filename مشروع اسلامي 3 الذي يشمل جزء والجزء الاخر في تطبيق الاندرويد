@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عبد الرحمن للخدمات الإسلامية</title>
+  <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'El Messiri', sans-serif;
+      background: linear-gradient(135deg, #0d1b2a 0%, #1b2838 30%, #0a1628 60%, #0d1b2a 100%);
+      color: #e0e0e0;
+      min-height: 100vh;
+      padding-bottom: 30px;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .app-container { max-width: 900px; margin: 0 auto; padding: 20px; }
+    
+    .app-header {
+      text-align: center; padding: 30px 20px; border-radius: 24px;
+      margin-bottom: 25px; position: relative; overflow: hidden;
+    }
+    .app-header h1 {
+      font-size: 28px; font-weight: 700;
+      background: linear-gradient(135deg, #d4af37, #f0d060, #d4af37);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; position: relative; z-index: 1;
+    }
+    .app-header p { color: rgba(255,255,255,0.6); font-size: 14px; margin-top: 8px; }
+    
+    .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 30px; }
+    .menu-card {
+      border-radius: 20px; padding: 22px 14px; text-align: center; cursor: pointer;
+      transition: all 0.3s; position: relative; overflow: hidden;
+    }
+    .menu-card:hover { transform: translateY(-4px); border-color: rgba(212,175,55,0.4); box-shadow: 0 15px 40px rgba(212,175,55,0.15); }
+    .menu-card .icon { font-size: 40px; margin-bottom: 10px; display: block; transition: transform 0.3s; }
+    .menu-card:hover .icon { transform: scale(1.15); }
+    .menu-card .label { font-size: 13px; font-weight: 600; color: #e0e0e0; }
+    
+    .card-prayer { border-top: 3px solid #4CAF50; }
+    .card-quran { border-top: 3px solid #2196F3; }
+    .card-tafsir { border-top: 3px solid #FF9800; }
+    .card-hesn { border-top: 3px solid #9C27B0; }
+    .card-hadith { border-top: 3px solid #FFD600; }
+    .card-tasbih { border-top: 3px solid #00BCD4; }
+    .card-audio { border-top: 3px solid #E91E63; }
+    
+    .app-footer { text-align: center; padding: 20px; border-radius: 20px; margin-top: 20px; }
+    .app-footer .verse { font-size: 16px; color: #d4af37; margin-bottom: 10px; }
+    .social-links { display: flex; justify-content: center; gap: 20px; margin-top: 15px; }
+    .social-links a {
+      width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s;
+    }
+    .social-links a:hover { background: rgba(212,175,55,0.2); border-color: #d4af37; }
+    .social-links img { width: 24px; height: 24px; }
+    
+    .screen { display: none; }
+    .screen.active { display: block; }
+    
+    .item-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .item-btn {
+      padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px; color: #e0e0e0; cursor: pointer; text-align: center; transition: all 0.3s;
+      font-family: 'El Messiri', sans-serif;
+    }
+    .item-btn:hover { background: rgba(212,175,55,0.15); border-color: #d4af37; }
+    
+    .section-title { color: #d4af37; font-size: 20px; margin: 15px 0; }
+    .search-input {
+      width: 100%; padding: 14px; border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05);
+      color: white; margin-bottom: 15px; font-family: 'El Messiri', sans-serif;
+    }
+    .prayer-row {
+      display: flex; justify-content: space-between; padding: 16px;
+      background: rgba(0,0,0,0.3); border-radius: 14px; margin-bottom: 8px;
+      border-right: 4px solid #4CAF50;
+    }
+    .quran-text {
+      background: rgba(255,255,255,0.95); color: #1a1a1a; padding: 25px;
+      border-radius: 20px; line-height: 2.4; font-size: 20px; text-align: right;
+    }
+    .hesn-card {
+      background: rgba(255,255,255,0.04); padding: 18px; border-radius: 16px;
+      border-right: 4px solid #9C27B0; margin-bottom: 12px; line-height: 1.8;
+    }
+    .audio-player { width: 100%; margin-top: 15px; border-radius: 12px; }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <div class="screen active" id="homeScreen">
+    <div class="app-header glass">
+      <h1>عبد الرحمن للخدمات الإسلامية</h1>
+      <p>📿 مصحف · مواقيت صلاة · أذكار · تلاوات</p>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-card glass card-quran" onclick="showScreen('quranIndex','read')"><span class="icon">📖</span><span class="label">المصحف الكريم</span></div>
+      <div class="menu-card glass card-tafsir" onclick="showScreen('quranIndex','tafsir')"><span class="icon">📚</span><span class="label">تفسير القرآن</span></div>
+      <div class="menu-card glass card-hesn" onclick="showScreen('hesnScreen')"><span class="icon">🛡️</span><span class="label">حصن المسلم</span></div>
+      <div class="menu-card glass card-hadith" onclick="showScreen('hadithBooks')"><span class="icon">📜</span><span class="label">الأحاديث النبوية</span></div>
+      <div class="menu-card glass card-tasbih" onclick="showScreen('tashbihScreen')"><span class="icon">📿</span><span class="label">السبحة الذكية</span></div>
+      <div class="menu-card glass card-audio" onclick="showScreen('recitersList')"><span class="icon">🎧</span><span class="label">المصحف الصوتي</span></div>
+      <div class="menu-card glass card-prayer" onclick="showScreen('prayerCities')"><span class="icon">🕌</span><span class="label">مواقيت الصلاة</span></div>
+    </div>
+    <div class="app-footer glass">
+      <p class="verse">فَإِذَا جَاءَ أَمْرُ اللَّهِ قُضِيَ بِالْحَقِّ وَخَسِرَ هُنَالِكَ الْمُبْطِلُونَ</p>
+      <p style="color:#d4af37; font-size:13px;">تم تصميم هذا التطبيق لمساعدة المسلمين حول العالم</p>
+      <div class="social-links">
+        <a href="https://wa.me/201153297929"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp"></a>
+        <a href="https://www.facebook.com/share/1DvSFCtmyo/"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook"></a>
+        <a href="https://youtube.com/channel/UC2k1P03gfQu_Ic759XaeYhw?si=OOfLyQ75zwSyx_rB"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube"></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- مواقيت الصلاة -->
+  <div class="screen" id="prayerCities">
+    <h2 class="section-title">اختر المحافظة</h2>
+    <div class="item-grid" id="citiesList"></div>
+  </div>
+  <div class="screen" id="prayerTimes">
+    <h2 class="section-title" id="prayerCityTitle"></h2>
+    <div id="prayerTimesList"></div>
+  </div>
+
+  <!-- المصحف -->
+  <div class="screen" id="quranIndex">
+    <h2 class="section-title">الفهرس</h2>
+    <input type="text" class="search-input" id="quranSearch" onkeyup="filterQuran()" placeholder="ابحث عن سورة...">
+    <div class="item-grid" id="surahList"></div>
+  </div>
+  <div class="screen" id="quranView">
+    <h2 class="section-title" id="quranTitle"></h2>
+    <div class="quran-text" id="quranText"></div>
+    <div class="quran-text" id="tafsirText" style="display:none;"></div>
+  </div>
+
+  <!-- حصن المسلم -->
+  <div class="screen" id="hesnScreen">
+    <h2 class="section-title">🛡️ حصن المسلم الكامل</h2>
+    <div id="hesnContent"></div>
+  </div>
+
+  <!-- الأحاديث -->
+  <div class="screen" id="hadithBooks">
+    <h2 class="section-title">📜 كتب السنة</h2>
+    <button class="item-btn" onclick="loadHadith('bukhari')">صحيح البخاري</button>
+    <button class="item-btn" style="margin-top:10px;" onclick="loadHadith('muslim')">صحيح مسلم</button>
+  </div>
+  <div class="screen" id="hadithList">
+    <h2 class="section-title" id="hadithBookTitle"></h2>
+    <input type="text" class="search-input" id="hadithSearch" onkeyup="filterHadith()" placeholder="ابحث عن حديث...">
+    <div class="item-grid" id="hadithItems"></div>
+  </div>
+  <div class="screen" id="hadithView">
+    <h2 class="section-title" id="hadithTitle"></h2>
+    <div class="hesn-card" id="hadithText"></div>
+  </div>
+
+  <!-- السبحة -->
+  <div class="screen" id="tashbihScreen">
+    <h2 class="section-title">📿 السبحة الذكية</h2>
+    <div style="text-align:center;">
+      <div id="zekrDisplay" style="font-size:28px; color:#d4af37; margin:20px 0;">سبحان الله</div>
+      <div id="zekrCount" style="font-size:80px; font-weight:700; color:#fff; margin:20px 0;">0</div>
+      <div id="fadlDisplay" style="font-size:14px; color:rgba(255,255,255,0.6); margin-bottom:20px;">من قال سبحان الله 100 مرة غفرت ذنوبه ولو كانت مثل زبد البحر</div>
+      <button class="item-btn" style="background:#4CAF50; color:white; width:100%; font-size:24px; padding:20px;" onclick="addZekr()">اضغط للذكر</button>
+      <button class="item-btn" style="background:#F44336; color:white; width:100%; margin-top:10px;" onclick="resetZekr()">تصفير</button>
+    </div>
+  </div>
+
+  <!-- المصحف الصوتي -->
+  <div class="screen" id="recitersList">
+    <h2 class="section-title">🎧 القراء</h2>
+    <div class="item-grid" id="recitersGrid"></div>
+  </div>
+  <div class="screen" id="reciterSurahs">
+    <h2 class="section-title" id="reciterTitle"></h2>
+    <input type="text" class="search-input" id="reciterSearch" onkeyup="filterReciterSurahs()" placeholder="ابحث عن سورة...">
+    <div class="item-grid" id="reciterSurahList"></div>
+  </div>
+  <div class="screen" id="audioPlayer">
+    <h3 class="section-title" id="audioTitle"></h3>
+    <audio controls autoplay class="audio-player" id="audioElement"><source src="" type="audio/mpeg"></audio>
+  </div>
+
+</div>
+
+<script>
+  // --- المتغيرات العامة ---
+  let currentMode = 'read';
+  let screenHistory = ['homeScreen'];
+
+  const cities = [
+    { ar: 'الفيوم', en: 'Fayoum' }, { ar: 'القاهرة', en: 'Cairo' },
+    { ar: 'الجيزة', en: 'Giza' }, { ar: 'الإسكندرية', en: 'Alexandria' },
+    { ar: 'طنطا', en: 'Tanta' }, { ar: 'المنصورة', en: 'Mansoura' },
+    { ar: 'بني سويف', en: 'Beni_Suef' }, { ar: 'سوهاج', en: 'Sohag' },
+    { ar: 'المنيا', en: 'Minya' }, { ar: 'أسيوط', en: 'Asyut' },
+    { ar: 'الأقصر', en: 'Luxor' }, { ar: 'أسوان', en: 'Aswan' }
+  ];
+  const recitersList = [
+    { code: 'hussary', name: 'محمود الحصري' }, { code: 'basit', name: 'عبد الباسط عبد الصمد' },
+    { code: 'minsh', name: 'محمد صديق المنشاوي' }, { code: 'afs', name: 'مشاري العفاسي' },
+    { code: 'shur', name: 'سعود الشريم' }, { code: 'maher', name: 'ماهر المعيقلي' }
+  ];
+  const reciterCodes = {
+    hussary: 'https://server13.mp3quran.net/hussary', basit: 'https://server7.mp3quran.net/basit',
+    minsh: 'https://server10.mp3quran.net/minsh', afs: 'https://server8.mp3quran.net/afs',
+    shur: 'https://server7.mp3quran.net/shur', maher: 'https://server12.mp3quran.net/maher'
+  };
+  const bukhari = [
+    { id:1, t:'1. حديث النية', x:'عن عمر بن الخطاب رضي الله عنه قال: سمعت رسول الله ﷺ يقول: (إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى، فمن كانت هجرته إلى الله ورسوله فهجرته إلى الله ورسوله، ومن كانت هجرته لدنيا يصيبها أو امرأة ينكحها فهجرته إلى ما هاجر إليه). [رواه البخاري]' },
+    { id:2, t:'2. بني الإسلام', x:'عن ابن عمر رضي الله عنهما قال: قال رسول الله ﷺ: (بني الإسلام على خمس: شهادة أن لا إله إلا الله وأن محمداً رسول الله، وإقام الصلاة، وإيتاء الزكاة، وحج البيت، وصوم رمضان). [رواه البخاري]' },
+    { id:3, t:'3. تعلم القرآن', x:'عن عثمان بن عفان رضي الله عنه قال: قال النبي ﷺ: (خيركم من تعلم القرآن وعلمه). [رواه البخاري]' },
+    { id:4, t:'4. آية المنافق', x:'عن أبي هريرة رضي الله عنه قال: قال رسول الله ﷺ: (آية المنافق ثلاث: إذا حدث كذب، وإذا وعد أخلف، وإذا اؤتمن خان). [رواه البخاري]' },
+    { id:5, t:'5. أحب الأعمال', x:'عن ابن مسعود رضي الله عنه قال: سألت النبي ﷺ أي العمل أحب إلى الله؟ قال: (الصلاة على وقتها)، قلت: ثم أي؟ قال: (بر الوالدين)، قلت: ثم أي؟ قال: (الجهاد في سبيل الله). [رواه البخاري]' },
+    { id:6, t:'6. يسروا ولا تعسروا', x:'عن أنس بن مالك رضي الله عنه قال: قال النبي ﷺ: (يسروا ولا تعسروا، وبشروا ولا تنفروا). [رواه البخاري]' },
+    { id:7, t:'7. فضل السواك', x:'عن أبي هريرة رضي الله عنه قال: قال رسول الله ﷺ: (لولا أن أشق على أمتي لأمرتهم بالسواك مع كل صلاة). [رواه البخاري]' },
+    { id:8, t:'8. تعريف المسلم', x:'عن عبد الله بن عمرو رضي الله عنهما قال: قال النبي ﷺ: (المسلم من سلم المسلمون من لسانه ويده، والمهاجر من هجر ما نهى الله عنه). [رواه البخاري]' },
+    { id:9, t:'9. الصدق والبر', x:'عن ابن مسعود رضي الله عنه قال: قال النبي ﷺ: (عليكم بالصدق، فإن الصدق يهدي إلى البر، وإن البر يهدي إلى الجنة). [رواه البخاري]' },
+    { id:10, t:'10. بناء المساجد', x:'عن عثمان بن عفان رضي الله عنه قال: سمعت النبي ﷺ يقول: (من بنى مسجداً يبتغي به وجه الله بنى الله له مثله في الجنة). [رواه البخاري]' }
+  ];
+  const muslim = [
+    { id:11, t:'11. الدين النصيحة', x:'عن تميم الداري رضي الله عنه أن النبي ﷺ قال: (الدين النصيحة)، قلنا: لمن؟ قال: (لله ولأولي الأمر ولرسوله ولأئمة المسلمين وعامتهم). [رواه مسلم]' },
+    { id:12, t:'12. التحذير من الغش', x:'عن أبي هريرة رضي الله عنه أن رسول الله ﷺ قال: (من حمل علينا السلاح فليس منا، ومن غشنا فليس منا). [رواه مسلم]' },
+    { id:13, t:'13. طلب العلم', x:'عن أبي هريرة رضي الله عنه قال: قال رسول الله ﷺ: (من سلك طريقاً يلتمس فيه علماً سهل الله له به طريقاً إلى الجنة). [رواه مسلم]' },
+    { id:14, t:'14. الاستقامة', x:'عن سفيان بن عبد الله رضي الله عنه قال: قلت: يا رسول الله قل لي في الإسلام قولاً لا أسأل عنه أحداً غيرك، قال: (قل آمنت بالله ثم استقم). [رواه مسلم]' },
+    { id:15, t:'15. شفاعة القرآن', x:'عن أبي أمامة رضي الله عنه قال: سمعت رسول الله ﷺ يقول: (اقرأوا القرآن فإنه يأتي يوم القيامة شفيعاً لأصحابه). [رواه مسلم]' },
+    { id:16, t:'16. حرمة الظلم', x:'عن جابر رضي الله عنه أن رسول الله ﷺ قال: (اتقوا الظلم فإن الظلم ظلمات يوم القيامة، واتقوا الشح فإن الشح أهلك من كان قبلكم). [رواه مسلم]' },
+    { id:17, t:'17. فضل الطهور', x:'عن أبي مالك الأشعري رضي الله عنه قال: قال رسول الله ﷺ: (الطهور شطر الإيمان، والحمد لله تملأ الميزان). [رواه مسلم]' },
+    { id:18, t:'18. أحب الكلام لله', x:'عن أبي هريرة رضي الله عنه قال: قال رسول الله ﷺ: (لأن أقول سبحان الله والحمد لله ولا إله إلا الله والله أكبر أحب إلي مما طلعت عليه الشمس). [رواه مسلم]' },
+    { id:19, t:'19. السنّة الحسنة', x:'عن جرير بن عبد الله رضي الله عنه قال: قال رسول الله ﷺ: (من سن في الإسلام سنة حسنة فله أجرها وأجر من عمل بها بعده). [رواه مسلم]' },
+    { id:20, t:'20. حق المسلم', x:'عن أبي هريرة رضي الله عنه قال: قال رسول الله ﷺ: (حق المسلم على المسلم ست: إذا لقيته فسلم عليه، وإذا دعاك فأجبه، وإذا استنصحك فانصح له..). [رواه مسلم]' }
+  ];
+
+  // --- الرجوع من النظام ---
+  window.addEventListener('popstate', (e) => {
+    if (screenHistory.length > 1) {
+      screenHistory.pop();
+      const prev = screenHistory[screenHistory.length - 1];
+      showScreen(prev);
+    }
+  });
+
+  // --- التنقل بين الشاشات ---
+  function showScreen(id, mode) {
+    if (mode) currentMode = mode;
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const target = document.getElementById(id);
+    if (target) target.classList.add('active');
+    if (screenHistory[screenHistory.length - 1] !== id) {
+      screenHistory.push(id);
+      window.history.pushState({}, '', '#' + id);
+    }
+
+    if (id === 'prayerCities') loadCities();
+    if (id === 'quranIndex') loadSurahs();
+    if (id === 'hesnScreen') loadHesn();
+    if (id === 'recitersList') loadReciters();
+  }
+
+  // --- مواقيت الصلاة ---
+  function convertTo12Hour(t24) { try { let [h,m]=t24.split(':').map(Number); let p=h<12?"ص":"م"; h=h%12; if(h===0)h=12; return `${h}:${String(m).padStart(2,'0')} ${p}`; } catch(e) { return t24; } }
+  function loadCities() { document.getElementById('citiesList').innerHTML = cities.map(c => `<div class="item-btn" onclick="loadPrayerTimes('${c.en}','${c.ar}')">${c.ar}</div>`).join(''); }
+  async function loadPrayerTimes(en, ar) {
+    const r = await fetch(`https://api.aladhan.com/v1/timingsByCity?city=${en}&country=Egypt&method=5`);
+    const d = await r.json(); const t = d.data.timings;
+    document.getElementById('prayerCityTitle').textContent = `مواقيت ${ar}`;
+    const names = { Fajr: 'الفجر', Dhuhr: 'الظهر', Asr: 'العصر', Maghrib: 'المغرب', Isha: 'العشاء' };
+    document.getElementById('prayerTimesList').innerHTML = Object.entries(names).map(([k,v]) => `<div class="prayer-row"><span>${convertTo12Hour(t[k])}</span><b>${v}</b></div>`).join('');
+    showScreen('prayerTimes');
+  }
+
+  // --- المصحف ---
+  async function loadSurahs() { const r = await fetch('https://api.alquran.cloud/v1/surah'); const d = await r.json(); window.quranData = d.data; renderSurahs(d.data); }
+  function renderSurahs(data) { document.getElementById('surahList').innerHTML = data.map(s => `<div class="item-btn" onclick="loadSurah(${s.number})">${s.number}. ${s.name}</div>`).join(''); }
+  function filterQuran() { const q = document.getElementById('quranSearch').value.toLowerCase(); renderSurahs(window.quranData.filter(s => s.name.includes(q) || s.number == q)); }
+  async function loadSurah(num) {
+    const r = await fetch(`https://api.alquran.cloud/v1/surah/${num}`); const d = await r.json();
+    document.getElementById('quranTitle').textContent = `سورة ${d.data.name}`;
+    if (currentMode === 'tafsir') {
+      try {
+        const tr = await fetch(`https://api.alquran.cloud/v1/surah/${num}/ar.muyassar`); const td = await tr.json();
+        document.getElementById('tafsirText').style.display = 'block';
+        document.getElementById('tafsirText').innerHTML = '<h3 style="color:#d4af37;">تفسير السورة (الميسر)</h3>' + td.data.ayahs.map((a,i) => `<p>${a.text} <span style="color:#4CAF50;">﴿${i+1}﴾</span></p>`).join('');
+        document.getElementById('quranText').style.display = 'none';
+      } catch(e) { document.getElementById('tafsirText').innerHTML = '<p>عذراً، التفسير غير متاح حالياً</p>'; document.getElementById('tafsirText').style.display = 'block'; document.getElementById('quranText').style.display = 'none'; }
+    } else {
+      document.getElementById('quranText').style.display = 'block';
+      document.getElementById('quranText').innerHTML = d.data.ayahs.map((a,i) => `${a.text} <span style="color:#4CAF50;">﴿${i+1}﴾</span>`).join(' ');
+      document.getElementById('tafsirText').style.display = 'none';
+    }
+    showScreen('quranView');
+  }
+
+  // --- حصن المسلم ---
+  function loadHesn() {
+    const azkar = [
+      { t:'1. الصباح', x:'(أصبحنا وأصبح الملك لله، والحمد لله، لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير).' },
+      { t:'2. المساء', x:'(أمسينا وأمسى الملك لله، والحمد لله، اللهم بك أمسينا، وبك أصبحنا، وبك نحيا، وبك نموت، وإليك المصير).' },
+      { t:'3. النوم', x:'(باسمك ربي وضعت جنبي وبك أرفعه، فإن أمسكت نفسي فارحمها، وإن أرسلتها فاحفظها بما تحفظ به عبادك الصالحين).' },
+      { t:'4. الخروج', x:'(بسم الله، توكلت على الله، ولا حول ولا قوة إلا بالله، اللهم إني أعوذ بك أن أضِل أو أُضَل).' },
+      { t:'5. دخول المسجد', x:'(أعوذ بالله العظيم، وبوجهه الكريم، وسلطانه القديم، من الشيطان الرجيم).' },
+      { t:'6. الكرب', x:'(لا إله إلا الله العظيم الحليم، لا إله إلا الله رب العرش العظيم).' },
+      { t:'7. الهم والحزن', x:'(اللهم إني أعوذ بك من الهم والحزن، والعجز والكسل).' },
+      { t:'8. سيد الاستغفار', x:'(اللهم أنت ربي لا إله إلا أنت، خلقتني وأنا عبدك).' },
+      { t:'9. التحصين اليومي', x:'(بسم الله الذي لا يضر مع اسمه شيء في الأرض ولا في السماء وهو السميع العليم) - ثلاث مرات.' },
+      { t:'10. رؤية المبتلى', x:'(الحمد لله الذي عافاني مما ابتلاك به، وفضلني على كثير ممن خلق تفضيلاً).' }
+    ];
+    document.getElementById('hesnContent').innerHTML = azkar.map(z => `<div class="hesn-card"><b>${z.t}:</b> ${z.x}</div>`).join('');
+  }
+
+  // --- الأحاديث ---
+  function loadHadith(book) { window.currentHadith = book==='bukhari'?bukhari:muslim; document.getElementById('hadithBookTitle').textContent = book==='bukhari'?'صحيح البخاري':'صحيح مسلم'; renderHadith(window.currentHadith); showScreen('hadithList'); }
+  function renderHadith(data) { document.getElementById('hadithItems').innerHTML = data.map(h => `<div class="item-btn" onclick="viewHadith(${h.id})">${h.t}</div>`).join(''); }
+  function filterHadith() { const q = document.getElementById('hadithSearch').value.toLowerCase(); renderHadith(window.currentHadith.filter(h => h.t.includes(q) || h.id==q)); }
+  function viewHadith(id) { const h = window.currentHadith.find(h => h.id===id); document.getElementById('hadithTitle').textContent = h.t; document.getElementById('hadithText').textContent = h.x; showScreen('hadithView'); }
+
+  // --- السبحة ---
+  let zCount = 0;
+  const zData = [
+    { z:"سبحان الله", f:"من قال سبحان الله 100 مرة غفرت ذنوبه ولو كانت مثل زبد البحر" },
+    { z:"الحمد لله", f:"من قال الحمد لله ملأت الميزان، وهي أحب الكلام إلى الله" },
+    { z:"الله أكبر", f:"من قال الله أكبر كتبت له عشرون حسنة وحطت عنه عشرون سيئة" },
+    { z:"لا إله إلا الله", f:"أفضل الذكر وهي مفتاح الجنة وأمان من النار" },
+    { z:"أستغفر الله", f:"من لزم الاستغفار جعل الله له من كل هم فرجاً ومن كل ضيق مخرجاً" },
+    { z:"اللهم صلِ وسلم على نبينا محمد", f:"من صلى عليّ صلاة واحدة صلى الله عليه بها عشراً" }
+  ];
+  function addZekr() { zCount++; document.getElementById('zekrCount').textContent = zCount; const idx = Math.floor(zCount/33) % zData.length; document.getElementById('zekrDisplay').textContent = zData[idx].z; document.getElementById('fadlDisplay').textContent = zData[idx].f; }
+  function resetZekr() { zCount = 0; document.getElementById('zekrCount').textContent = 0; }
+
+  // --- المصحف الصوتي ---
+  function loadReciters() { document.getElementById('recitersGrid').innerHTML = recitersList.map(r => `<div class="item-btn" onclick="showReciterSurahs('${r.code}','${r.name}')">الشيخ ${r.name}</div>`).join(''); }
+  async function showReciterSurahs(code, name) { window.currentReciter={code,name}; document.getElementById('reciterTitle').textContent=`مصحف ${name}`; if(!window.quranData){const r=await fetch('https://api.alquran.cloud/v1/surah'); window.quranData=(await r.json()).data;} renderReciterSurahs(window.quranData); showScreen('reciterSurahs'); }
+  function renderReciterSurahs(data) { document.getElementById('reciterSurahList').innerHTML = data.map(s => `<div class="item-btn" onclick="playAudio(${s.number})">${s.number}. ${s.name}</div>`).join(''); }
+  function filterReciterSurahs() { const q = document.getElementById('reciterSearch').value.toLowerCase(); renderReciterSurahs(window.quranData.filter(s => s.name.includes(q) || s.number==q)); }
+  function playAudio(num) { const url = `${reciterCodes[window.currentReciter.code]}/${String(num).padStart(3,'0')}.mp3`; document.getElementById('audioTitle').textContent=`سورة رقم ${num} - ${window.currentReciter.name}`; const audio=document.getElementById('audioElement'); audio.src=url; audio.load(); audio.play(); showScreen('audioPlayer'); }
+</script>
+</body>
+</html>
